@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: giriogowdaazuredevopsapp 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: giriogowdaazuredevopsapp
+  template:
+    metadata:
+      labels:
+        app: giriogowdaazuredevopsapp 
+    spec:
+      containers:
+        - name: giriogowdaazuredevopsapp 
+          image: azuredemoregistry27.azurecr.io/giriogowdaazuredevopsapp
+          ports:
+          - containerPort: 80
