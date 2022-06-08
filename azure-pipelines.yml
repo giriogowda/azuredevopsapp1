@@ -41,8 +41,8 @@ stages:
     - bash: echo Contents in System Default Working Directory; ls -R $(System.DefaultWorkingDirectory)
     - task: CopyFiles@2
       inputs:
-        SourceFolder: '$(System.DefaultWorkingDirectory)/manifest'
-        Contents: '**'
+        SourceFolder: '$(System.DefaultWorkingDirectory)'
+        Contents: 'manifest'
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
         OverWrite: true
     - bash: echo After copying to Build Artifact Directory; ls -R $(Build.ArtifactStagingDirectory) 
