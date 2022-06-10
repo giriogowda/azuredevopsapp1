@@ -29,7 +29,16 @@ stages:
       name: default
       vmImage: $(vmImageName)
     steps:
-    - task: CodeScanCloudAnalyze@1
+    - task: CodeScanCloudPrepare@1
+      inputs:
+        CodeScanCloud: 'codescan'
+        organization: 'girish-gowda89960'
+        scannerMode: 'CLI'
+        configMode: 'manual'
+        cliProjectKey: 'GIRIOGOWDA'
+        cliProjectName: 'gowdagirish222gg'
+        cliSources: '.'
+   
     - task: Docker@2
       displayName: Build and push an image to container registry
       inputs:
