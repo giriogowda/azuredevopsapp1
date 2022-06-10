@@ -39,7 +39,7 @@ stages:
         cliSources: '.'
     - task: CodeScanCloudPublish@1
       inputs:
-        pollingTimeoutSec: '300'
+        pollingTimeoutSec: '30'
     - task: CodeScanCloudAnalyze@1
 
 - stage: Build
