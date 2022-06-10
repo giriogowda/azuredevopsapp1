@@ -52,4 +52,6 @@ stages:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: 'manifest'
         publishLocation: 'Container'
+    - task: CodeScanCloudAnalyze@1
+    
         
