@@ -20,14 +20,13 @@ variables:
   vmImageName: 'ec2'
 
 stages:
-- stage: Build
-  displayName: Build and push stage
+- stage: Scan
   jobs:
-  - job: Build
-    displayName: Build
+  - job: scanning
+    displayName: scancloud
     pool:
-      name: default
-      vmImage: $(vmImageName)
+       name: default
+       vmImage: $(vmImageName)
     steps:
     - task: CodeScanCloudPrepare@1
       inputs:
@@ -38,6 +37,21 @@ stages:
         cliProjectKey: 'GIRIOGOWDA'
         cliProjectName: 'gowdagirish222gg'
         cliSources: '.'
+    - task: CodeScanCloudPublish@1
+      inputs:
+        pollingTimeoutSec: '300'
+    - task: CodeScanCloudAnalyze@1
+
+- stage: Build
+  displayName: Build and push stage
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      name: default
+      vmImage: $(vmImageName)
+    steps:
+    
    
     - task: Docker@2
       displayName: Build and push an image to container registry
