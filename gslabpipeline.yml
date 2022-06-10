@@ -35,12 +35,12 @@ stages:
         scannerMode: 'CLI'
         configMode: 'manual'
         cliProjectKey: 'GIRIOGOWDA'
-        cliProjectName: 'gowdagirish222gg'
+        cliProjectName: 'sonar.gowdagirish222gg'
         cliSources: '.'
     - task: CodeScanCloudPublish@1
       inputs:
-        pollingTimeoutSec: '30'
-    - task: CodeScanCloudAnalyze@1
+        pollingTimeoutSec: '100'
+
 
 - stage: Build
   displayName: Build and push stage
