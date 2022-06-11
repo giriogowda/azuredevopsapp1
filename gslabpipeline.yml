@@ -57,7 +57,7 @@ stages:
       displayName: Build and push an image to container registry
       inputs:
         containerRegistry: '$(dockerregistrysvc)'
-        repository: '$(imageRepository)'
+        repository: '$(docker_repo_name)'
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
         tags: '$(tag)'
