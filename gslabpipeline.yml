@@ -11,13 +11,13 @@ resources:
 variables:
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: '80d8f071-ea23-4b91-8987-d49601ea8243'
-  imageRepository: '$(docker_repo_name)'
-  containerRegistry: '$(docker_registry_name)'
+  #imageRepository: '$(docker_repo_name)'
+  #containerRegistry: '$(docker_registry_name)'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   tag: '$(Build.BuildId)'
 
   # Agent VM image name
-  vmImageName: $(self_hosted_agent_name)
+  vmImageName: ec2
 
 stages:
 - stage: Scan
@@ -57,9 +57,9 @@ stages:
       displayName: Build and push an image to container registry
       inputs:
         containerRegistry: '$(dockerRegistryServiceConnection)'
-        repository: '$(imageRepository)'
+        repository: '$(docker_repo_name)'
         command: 'buildAndPush'
-        Dockerfile: '**/Dockerfile'
+        Dockerfile: 'Dockerfile'
         tags: '$(tag)'
     - bash: echo Contents in System Default Working Directory; ls -R $(System.DefaultWorkingDirectory)
     - task: CopyFiles@2
