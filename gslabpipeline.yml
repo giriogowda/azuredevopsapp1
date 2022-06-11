@@ -10,7 +10,7 @@ resources:
 
 variables:
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection:  '$(dockerregistrysvc)'
+  dockerRegistryServiceConnection: '80d8f071-ea23-4b91-8987-d49601ea8243'
   imageRepository: '$(docker_repo_name)'
   containerRegistry: '$(docker_registry_name)'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
@@ -56,8 +56,8 @@ stages:
     - task: Docker@2
       displayName: Build and push an image to container registry
       inputs:
-        containerRegistry: '$(dockerregistrysvc)'
-        repository: '$(docker_repo_name)'
+        containerRegistry: '$(dockerRegistryServiceConnection)'
+        repository: '$(imageRepository)'
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
         tags: '$(tag)'
