@@ -10,14 +10,14 @@ resources:
 
 variables:
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: '72872e03-0725-4113-a37e-0cd7f4cf3226'
-  imageRepository: 'app/imagejavaapp'
-  containerRegistry: 'azurecontainerregistry27.azurecr.io'
+  dockerRegistryServiceConnection: '$(dockerregistrysvc)'
+  imageRepository: '$(docker_repo_name)'
+  containerRegistry: '$(docker_registry_name)'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   tag: '$(Build.BuildId)'
 
   # Agent VM image name
-  vmImageName: 'ec2'
+  vmImageName: '$(self_hosted_agent_name)'
 
 stages:
 - stage: Scan
