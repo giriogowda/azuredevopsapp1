@@ -37,6 +37,8 @@ stages:
         cliProjectKey: '$(scancloud_project_key)'
         cliProjectName: '$(scancloud_project_name)'
         cliSources: '.'
+
+    - task: CodeScanCloudAnalyze@1
     - task: CodeScanCloudPublish@1
       inputs:
         pollingTimeoutSec: '100'
