@@ -52,13 +52,15 @@ stages:
       
 
     - task: CodeScanCloudAnalyze@1
-      condition: succeededOrFailed()
+      condition: succeededOrFailed('CodeScanCloudPrepare@1')
     - task: CodeScanCloudPublish@1
+      condition: succeed('CodeScanCloudPrepare@1')
       inputs:
         pollingTimeoutSec: '100'
 
 
 - stage: Build
+  condition: 
   displayName: Build and push stage
   jobs:
   - job: Build
