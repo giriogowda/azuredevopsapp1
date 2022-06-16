@@ -61,7 +61,7 @@ stages:
 
 - stage: Build
   displayName: Build and push stage
-  condition: succededOrFailed()
+  condition: succeededOrFailed() 
   jobs:
   - job: Build
     displayName: Build
