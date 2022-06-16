@@ -59,8 +59,6 @@ stages:
 
 
 - stage: Build
-  
-  condition: 
   displayName: Build and push stage
   jobs:
   - job: Build
