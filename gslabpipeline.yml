@@ -22,7 +22,7 @@ variables:
 - name: dockerfilePath
   value: '$(Build.SourcesDirectory)/Dockerfile'
 - name: tag
-  value: '$(Build.BuildId)'
+  value: '$(Build.SourceId)'
 
   # Agent VM image name
 - name: vmImageName
