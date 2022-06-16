@@ -3,7 +3,12 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
 trigger:
-- master
+  batch: true
+  branches:
+   include:
+     - master
+
+
 
 resources:
 - repo: self
@@ -28,15 +33,17 @@ stages:
   jobs:
   - job: scanning
     displayName: scancloud
+    
     pool:
        name: default
        vmImage: $(vmImageName)
     steps:
     
+    
     - task: CodeScanCloudPrepare@1
       inputs:
         CodeScanCloud: 'codescan'
-        organization: '$(scancloud_organisation_name)'
+        organization: '$(scancloud_organisation_name'
         scannerMode: 'CLI'
         configMode: 'manual'
         cliProjectKey: '$(scancloud_project_key)'
@@ -45,12 +52,15 @@ stages:
       
 
     - task: CodeScanCloudAnalyze@1
+      condition: succeededOrFailed()
     - task: CodeScanCloudPublish@1
       inputs:
         pollingTimeoutSec: '100'
 
 
 - stage: Build
+  
+  condition: 
   displayName: Build and push stage
   jobs:
   - job: Build
