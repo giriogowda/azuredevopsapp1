@@ -54,7 +54,7 @@ stages:
     - task: CodeScanCloudAnalyze@1
       condition: succeededOrFailed()
     - task: CodeScanCloudPublish@1
-      condition: succeeded('CodeScanCloudPrepare@1')
+      condition: succeeded()
       inputs:
         pollingTimeoutSec: '100'
 
