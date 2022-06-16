@@ -32,6 +32,7 @@ stages:
        name: default
        vmImage: $(vmImageName)
     steps:
+    
     - task: CodeScanCloudPrepare@1
       inputs:
         CodeScanCloud: 'codescan'
@@ -41,6 +42,7 @@ stages:
         cliProjectKey: '$(scancloud_project_key)'
         cliProjectName: '$(scancloud_project_name)'
         cliSources: '.'
+      
 
     - task: CodeScanCloudAnalyze@1
     - task: CodeScanCloudPublish@1
@@ -67,6 +69,7 @@ stages:
         command: 'buildAndPush'
         Dockerfile: 'Dockerfile'
         tags: '$(tag)'
+      continueOnError: true 
     - bash: echo Contents in System Default Working Directory; ls -R $(System.DefaultWorkingDirectory)
     - task: CopyFiles@2
       inputs:
