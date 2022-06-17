@@ -1,3 +1,4 @@
+name: $(TeamProject)_$(Build.DefinitionName)_$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.r)
 # Docker
 # Build and push an image to Azure Container Registry
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
@@ -14,7 +15,7 @@ resources:
 - repo: self
 
 variables:
-- group: gslabdevops_variable_group
+#- group: gslabdevops_variable_group
   # Container registry service connection established during pipeline creation
   #imageRepository: '$(docker_repo_name)'
   #containerRegistry: '$(docker_registry_name)'
