@@ -79,6 +79,13 @@ stages:
         tags: '$(tag)'
       continueOnError: true 
     - bash: echo Contents in System Default Working Directory; ls -R $(System.DefaultWorkingDirectory)
+     
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: |
+          # Write your commands here
+          docker rmi $(docker images -q)
     - task: CopyFiles@2
       inputs:
         SourceFolder: '$(System.DefaultWorkingDirectory)'
