@@ -16,17 +16,16 @@ resources:
 variables:
 - group: gslabdevops_variable_group
   # Container registry service connection established during pipeline creation
-  #dockerRegistryServiceConnection: '80d8f071-ea23-4b91-8987-d49601ea8243'
   #imageRepository: '$(docker_repo_name)'
   #containerRegistry: '$(docker_registry_name)'
-- name: dockerfilePath
-  value: '$(Build.SourcesDirectory)/Dockerfile'
-- name: tag
-  value: '$(Build.BuildId)'
+#- name: dockerfilePath
+ # value: '$(Build.SourcesDirectory)/Dockerfile'
+#- name: tag
+ # value: '$(Build.BuildId)'
 
   # Agent VM image name
 - name: vmImageName
-  value: $[variables.self_hosted_agent_name]
+  value: $(self_hosted_agent_name)
 
 stages:
 - stage: Scan
