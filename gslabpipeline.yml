@@ -22,7 +22,7 @@ variables:
 - name: dockerfilePath
   value: '$(Build.SourcesDirectory)/Dockerfile'
 - name: tag
-  value: '$(Build.SourceId)'
+  value: '$(Build.BuildId)'
 
   # Agent VM image name
 - name: vmImageName
@@ -43,7 +43,7 @@ stages:
     - task: CodeScanCloudPrepare@1
       inputs:
         CodeScanCloud: 'codescan'
-        organization: '$(scancloud_organisation_name'
+        organization: '$(scancloud_organisation_name)'
         scannerMode: 'CLI'
         configMode: 'manual'
         cliProjectKey: '$(scancloud_project_key)'
@@ -69,8 +69,6 @@ stages:
       name: default
       vmImage: $(vmImageName)
     steps:
-    
-    
     - task: Docker@2
       displayName: Build and push an image to container registry
       inputs:
