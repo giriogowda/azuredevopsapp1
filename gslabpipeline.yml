@@ -53,6 +53,9 @@ stages:
     displayName: Ananlyzing & publish code
     dependsOn: scanning
     condition: succeeded()
+    pool:
+       name: default
+       vmImage: $(vmImageName)
     steps:
       - task: CodeScanCloudAnalyze@1
       - task: CodeScanCloudPublish@1
