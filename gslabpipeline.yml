@@ -35,13 +35,10 @@ stages:
   jobs:
   - job: scanning
     displayName: scancloud
-    
     pool:
        name: default
        vmImage: $(vmImageName)
     steps:
-    
-    
     - task: CodeScanCloudPrepare@1
       inputs:
         CodeScanCloud: 'codescan'
@@ -52,13 +49,15 @@ stages:
         cliProjectName: '$(scancloud_project_name)'
         cliSources: '.'
       
-
-    - task: CodeScanCloudAnalyze@1
-      condition: succeededOrFailed()
-    - task: CodeScanCloudPublish@1
-      condition: succeeded()
-      inputs:
-        pollingTimeoutSec: '100'
+  - job: Analyzing
+    displayName: Ananlyzing & publish code
+    dependsOn: scanning
+    condition: succeeded()
+    steps:
+      - task: CodeScanCloudAnalyze@1
+      - task: CodeScanCloudPublish@1
+        inputs:
+          pollingTimeoutSec: '100'
 
 
 - stage: Build
@@ -88,6 +87,7 @@ stages:
         script: |
           # Write your commands here
           docker rmi $(docker images -q)
+    
     - task: CopyFiles@2
       inputs:
         SourceFolder: '$(System.DefaultWorkingDirectory)'
