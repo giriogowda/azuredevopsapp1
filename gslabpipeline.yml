@@ -48,21 +48,19 @@ stages:
         cliProjectKey: '$(scancloud_project_key)'
         cliProjectName: '$(scancloud_project_name)'
         cliSources: '.'
-      
-  - job: Analyzing
-    displayName: Ananlyzing & publish code
+    - task: CodeScanCloudAnalyze@1
+    - task: CodeScanCloudPublish@1
+      inputs:
+          pollingTimeoutSec: '100'
+  - job: Notification
+    displayName: Code quality notification
     dependsOn: scanning
     condition: succeeded()
     pool:
        name: default
        vmImage: $(vmImageName)
     steps:
-      - task: CodeScanCloudAnalyze@1
-      - task: CodeScanCloudPublish@1
-        inputs:
-          pollingTimeoutSec: '100'
-
-
+    - bash: echo "the build result is succesfully published in scancloud"
 - stage: Build
   displayName: Build and push stage
   condition: succeededOrFailed() 
