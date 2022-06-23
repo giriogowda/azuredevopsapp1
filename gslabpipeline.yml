@@ -63,7 +63,7 @@ stages:
     - bash: echo "the build result is succesfully published in scancloud"
 - stage: Build
   displayName: Build and push stage
-  condition: succeededOrFailed() 
+  condition: succeeded() 
   jobs:
   - job: Build
     displayName: Build
