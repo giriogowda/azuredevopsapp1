@@ -86,7 +86,7 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          # Write your commands here
+          # Write your commands here if required
           docker rmi $(docker images -q)
     
     - task: CopyFiles@2
