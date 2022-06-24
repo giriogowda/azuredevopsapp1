@@ -83,10 +83,12 @@ stages:
     - bash: echo Contents in System Default Working Directory; ls -R $(System.DefaultWorkingDirectory)
      
     - task: Bash@3
+      continueOnError: true
       inputs:
         targetType: 'inline'
         script: |
           # Write your commands here if required
+          docker rm $(docker ps -a)
           docker rmi $(docker images -q)
     
     - task: CopyFiles@2
