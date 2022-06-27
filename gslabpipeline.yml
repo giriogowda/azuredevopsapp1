@@ -10,7 +10,8 @@ trigger:
      - master
    exclude:
      - README.md
-
+     - gslabpipeline.yml
+     
 #new modified yml
 
 resources:
@@ -63,6 +64,7 @@ stages:
     - bash: echo "the build result is succesfully published in scancloud"
 - stage: Build
   displayName: Build and push stage
+  dependsOn: scan
   condition: succeeded() 
   jobs:
   - job: Build
