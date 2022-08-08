@@ -67,7 +67,7 @@ stages:
         repository: '$(docker_repo_name)'
         command: 'buildAndPush'
         Dockerfile: 'Dockerfile'
-        tags: '$(tag)'
+        tags: 
       continueOnError: true
     - task: Bash@3
       inputs:
