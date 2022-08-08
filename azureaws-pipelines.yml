@@ -52,7 +52,7 @@ stages:
   displayName: Build and push stage
   dependsOn:
   - scan
-  condition: succeeded()
+  condition: succeededOrFailed()
   jobs:
   - job: Build
     displayName: Build
