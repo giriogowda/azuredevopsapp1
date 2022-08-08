@@ -79,7 +79,7 @@ stages:
         targetType: 'inline'
         script: |
           # Write your commands here if required
-          docker rm $(docker ps -a)
+          # docker rm $(docker ps -a)
           # docker rmi $(docker images -q)
     - task: CopyFiles@2
       inputs:
