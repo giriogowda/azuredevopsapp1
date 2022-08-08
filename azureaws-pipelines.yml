@@ -14,45 +14,45 @@ variables:
 - name: vmImageName
   value: $(self_hosted_agent_name)
 stages:
-- stage: Scan
-  jobs:
-  - job: scanning
-    displayName: scancloud
-    pool:
-      name: default
-      vmImage: $(vmImageName)
-    steps:
-    - task: CodeScanCloudPrepare@1
-      inputs:
-        CodeScanCloud: 'codescan'
-        organization: 'girish-gowda89960'
-        scannerMode: 'CLI'
-        configMode: 'manual'
-        cliProjectKey: '$(scancloud_project_key)'
-        cliProjectName: '$(scancloud_project_name)'
-        cliSources: '.'
-    - task: CodeScanCloudAnalyze@1
-    - task: CodeScanCloudPublish@1
-      inputs:
-        pollingTimeoutSec: '100'
-  - job: Notification
-    displayName: Code quality notification
-    dependsOn:
-    - scanning
-    condition: succeeded()
-    pool:
-      name: default
-      vmImage: $(vmImageName)
-    steps:
-    - task: Bash@3
-      inputs:
-        targetType: inline
-        script: echo "the build result is succesfully published in scancloud"
+# - stage: Scan
+#   jobs:
+#   - job: scanning
+#     displayName: scancloud
+#     pool:
+#       name: default
+#       vmImage: $(vmImageName)
+#     steps:
+#     - task: CodeScanCloudPrepare@1
+#       inputs:
+#         CodeScanCloud: 'codescan'
+#         organization: 'girish-gowda89960'
+#         scannerMode: 'CLI'
+#         configMode: 'manual'
+#         cliProjectKey: '$(scancloud_project_key)'
+#         cliProjectName: '$(scancloud_project_name)'
+#         cliSources: '.'
+#     - task: CodeScanCloudAnalyze@1
+#     - task: CodeScanCloudPublish@1
+#       inputs:
+#         pollingTimeoutSec: '100'
+#   - job: Notification
+#     displayName: Code quality notification
+#     dependsOn:
+#     - scanning
+#     condition: succeeded()
+#     pool:
+#       name: default
+#       vmImage: $(vmImageName)
+#     steps:
+#     - task: Bash@3
+#       inputs:
+#         targetType: inline
+#         script: echo "the build result is succesfully published in scancloud"
 - stage: Build
   displayName: Build and push stage
-  dependsOn:
-  - scan
-  condition: succeededOrFailed()
+  # dependsOn:
+  # - scan
+  # condition: succeededOrFailed()
   jobs:
   - job: Build
     displayName: Build
@@ -64,10 +64,9 @@ stages:
       displayName: Build and push an image to container registry
       inputs:
         containerRegistry: 'container-registry'
-        repository: '$(docker_repo_name)'
+        repository: 'javaappazure'
         command: 'buildAndPush'
         Dockerfile: 'Dockerfile'
-        tags: $(Build.BuildId)
       continueOnError: true
     - task: Bash@3
       inputs:
