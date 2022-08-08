@@ -64,7 +64,7 @@ stages:
       displayName: Build and push an image to container registry
       inputs:
         containerRegistry: 'container-registry'
-        repository: 'javaappazure'
+        repository: '$(docker_repo_name)'
         command: 'buildAndPush'
         Dockerfile: 'Dockerfile'
       continueOnError: true
