@@ -65,7 +65,7 @@ stages:
       displayName: Build and push an image to container registry
       inputs:
         containerRegistry: 'container-registry'
-        repository: '$(docker_repo_name)'
+        repository: 'girish2730/azurejavaapp'
         command: 'buildAndPush'
         Dockerfile: 'Dockerfile'
       continueOnError: true
@@ -80,7 +80,7 @@ stages:
         script: |
           # Write your commands here if required
           docker rm $(docker ps -a)
-          docker rmi $(docker images -q)
+          # docker rmi $(docker images -q)
     - task: CopyFiles@2
       inputs:
         SourceFolder: '$(System.DefaultWorkingDirectory)'
