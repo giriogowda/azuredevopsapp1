@@ -13,6 +13,7 @@ resources:
 variables:
 - name: vmImageName
   value: $(self_hosted_agent_name)
+- group: gslabdevops_variable_group
 stages:
 # - stage: Scan
 #   jobs:
