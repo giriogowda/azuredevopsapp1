@@ -25,7 +25,7 @@ stages:
     - task: CodeScanCloudPrepare@1
       inputs:
         CodeScanCloud: 'codescan'
-        organization: '$(scancloud_organisation_name)'
+        organization: 'girish-gowda89960'
         scannerMode: 'CLI'
         configMode: 'manual'
         cliProjectKey: '$(scancloud_project_key)'
