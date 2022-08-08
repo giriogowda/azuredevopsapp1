@@ -65,7 +65,7 @@ stages:
       displayName: Build and push an image to container registry
       inputs:
         containerRegistry: 'container-registry'
-        repository: '$[variables.docker_repo_name]'
+        repository: '$(docker_repo_name)'
         command: 'buildAndPush'
         Dockerfile: 'Dockerfile'
       continueOnError: true
@@ -74,7 +74,7 @@ stages:
         targetType: inline
         script: echo Contents in System Default Working Directory; ls -R $(System.DefaultWorkingDirectory)
     - task: Bash@3
-      continueOnError: true
+      continueOnError: false
       inputs:
         targetType: 'inline'
         script: |
