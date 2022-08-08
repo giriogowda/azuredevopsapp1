@@ -1,0 +1,99 @@
+name: $(TeamProject)_$(Build.DefinitionName)_$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.r)
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+    exclude:
+    - README.md
+    - azureaws-pipelines.yml
+resources:
+  repositories:
+  - repository: self
+variables:
+- name: vmImageName
+  value: $(self_hosted_agent_name)
+stages:
+- stage: Scan
+  jobs:
+  - job: scanning
+    displayName: scancloud
+    pool:
+      name: default
+      vmImage: $(vmImageName)
+    steps:
+    - task: CodeScanCloudPrepare@1
+      inputs:
+        CodeScanCloud: 'codescan'
+        organization: '$(scancloud_organisation_name)'
+        scannerMode: 'CLI'
+        configMode: 'manual'
+        cliProjectKey: '$(scancloud_project_key)'
+        cliProjectName: '$(scancloud_project_name)'
+        cliSources: '.'
+    - task: CodeScanCloudAnalyze@1
+    - task: CodeScanCloudPublish@1
+      inputs:
+        pollingTimeoutSec: '100'
+  - job: Notification
+    displayName: Code quality notification
+    dependsOn:
+    - scanning
+    condition: succeeded()
+    pool:
+      name: default
+      vmImage: $(vmImageName)
+    steps:
+    - task: Bash@3
+      inputs:
+        targetType: inline
+        script: echo "the build result is succesfully published in scancloud"
+- stage: Build
+  displayName: Build and push stage
+  dependsOn:
+  - scan
+  condition: succeeded()
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      name: default
+      vmImage: $(vmImageName)
+    steps:
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        containerRegistry: '$(docker_service_connection)'
+        repository: '$(docker_repo_name)'
+        command: 'buildAndPush'
+        Dockerfile: 'Dockerfile'
+        tags: '$(tag)'
+      continueOnError: true
+    - task: Bash@3
+      inputs:
+        targetType: inline
+        script: echo Contents in System Default Working Directory; ls -R $(System.DefaultWorkingDirectory)
+    - task: Bash@3
+      continueOnError: true
+      inputs:
+        targetType: 'inline'
+        script: |
+          # Write your commands here if required
+          docker rm $(docker ps -a)
+          docker rmi $(docker images -q)
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: '$(System.DefaultWorkingDirectory)'
+        Contents: 'manifest'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+        OverWrite: true
+    - task: Bash@3
+      inputs:
+        targetType: inline
+        script: echo After copying to Build Artifact Directory; ls -R $(Build.ArtifactStagingDirectory)
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'manifest'
+        publishLocation: 'Container'
+
