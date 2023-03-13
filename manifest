@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: Deployments
 metadata:
   name: app1-nginx-deployment
   labels:
