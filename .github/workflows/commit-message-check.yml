@@ -13,6 +13,6 @@ jobs:
       - name: "Check Commit Message Format"
         run: |
           if ! grep -qE "(^|\s)AB#[0-9]+(\s|$)" $GITHUB_EVENT_PATH; then
-            echo "Commit message should contain AB# followed by a number"
+            echo "Commit message should contain AB# followed by a number and separated from other text by a space"
             exit 1
           fi
