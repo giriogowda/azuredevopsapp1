@@ -1,13 +1,9 @@
-name: Commit Keyword chek
+name: Workflow1
 on:
   pull_request:
     types: [opened, edited, reopened]
     branches:
       - '*'
-    # Only allow merging the pull request when the commit message contains the pattern
-    # "AB#ID" separated by whitespace. Otherwise, add a comment to the pull request
-    # indicating the error and prevent merging the pull request
-    if: "!contains(github.event.pull_request.head.commit.message, 'AB#ID') || !github.event.pull_request.head.commit.message.match(/(?:^|\s)AB#[0-9]+(?:\s|$)/)"
 jobs:
   commit_message_check:
     runs-on: ubuntu-latest
@@ -15,10 +11,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Check commit message
+        if: "!contains(github.event.pull_request.head.commit.message, 'AB#ID') || !github.event.pull_request.head.commit.message.match(/(?:^|\s)AB#[0-9]+(?:\s|$)/)"
         run: |
           commit_msg=$(git log --format=%B -n 1 $GITHUB_SHA)
           echo $commit_msg
-          echo "Passed"
+          echo "Okayv1"
           if [[ ! "$commit_msg" =~ (?:^|\s)AB#[0-9]+(?:\s|$) ]]; then
             echo "Error: Commit message must contain 'AB#' followed by a number separated by whitespace"
             exit 1
