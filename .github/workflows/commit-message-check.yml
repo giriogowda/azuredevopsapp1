@@ -1,4 +1,4 @@
-name: Workflow1
+name: Commit keyword validation
 on:
   pull_request:
     types: [opened, edited, reopened]
@@ -11,12 +11,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Check commit message
-        if: "!contains(github.event.pull_request.head.commit.message, 'AB#ID') || !github.event.pull_request.head.commit.message.match(/(?:^|\s)AB#[0-9]+(?:\s|$)/)"
         run: |
           commit_msg=$(git log --format=%B -n 1 $GITHUB_SHA)
           echo $commit_msg
           echo "Okayv1"
-          if [[ ! "$commit_msg" =~ (?:^|\s)AB#[0-9]+(?:\s|$) ]]; then
-            echo "Error: Commit message must contain 'AB#' followed by a number separated by whitespace"
+          if [[ ! "$commit_msg" =~ ^AB#[0-9]+$ ]]; then
+            echo "Error: Commit message must contain 'AB#' followed by ADO ID, in the form AB#ID"
             exit 1
           fi
