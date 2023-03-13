@@ -1,0 +1,20 @@
+name: Commit Message Check
+on:
+  pull_request_target:
+    types: [opened, synchronize]
+    branches:
+      - main
+
+jobs:
+  check-commit-message:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Check commit message
+        run: |
+          commit_message=$(git log --format=%B -n 1 ${{ github.event.pull_request.head.sha }})
+          if [[ $commit_message != *"AB#ID"* ]]; then
+            echo "Commit message does not contain AB#ID. Merging not allowed."
+            exit 1
+          fi
