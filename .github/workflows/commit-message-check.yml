@@ -1,21 +1,18 @@
-name: Commit keyword validation
+name: "Check Commit Message Format"
+
 on:
   pull_request:
     types: [opened, edited, reopened]
     branches:
       - '*'
+
 jobs:
-  commit_message_check:
+  check_commit_message_format:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Check commit message
+      - name: "Check Commit Message Format"
         run: |
-          commit_msg=$(git log --format=%B -n 1 $GITHUB_SHA)
-          echo $commit_msg
-          echo "Okayv1"
-          if [[ ! "$commit_msg" =~ ^AB#[0-9]+$ ]]; then
-            echo "Error: Commit message must contain 'AB#' followed by ADO ID, in the form AB#ID"
+          if ! grep -qE "AB#[0-9]+" $GITHUB_EVENT_PATH; then
+            echo "Commit message should contain AB# followed by a number"
             exit 1
           fi
