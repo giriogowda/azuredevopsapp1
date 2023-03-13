@@ -1,20 +1,21 @@
-name: Commit Message Check
+name: Commit keyword validation
 on:
-  pull_request_target:
-    types: [opened, synchronize]
+  pull_request:
+    types: [opened, edited, reopened]
     branches:
-      - master
-
+      - '*'
 jobs:
-  check-commit-message:
+  commit_message_check:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Check commit message
         run: |
-          commit_message=$(git log --format=%B -n 1 ${{ github.event.pull_request.head.sha }})
-          if [[ $commit_message != *"AB#ID"* ]]; then
-            echo "Commit message does not contain AB#ID. Merging not allowed."
+          commit_msg=$(git log --format=%B -n 1 $GITHUB_SHA)
+          echo $commit_msg
+          echo "Okayv1"
+          if [[ ! "$commit_msg" =~ ^AB#[0-9]+$ ]]; then
+            echo "Error: Commit message must contain 'AB#' followed by ADO ID, in the form AB#ID"
             exit 1
           fi
