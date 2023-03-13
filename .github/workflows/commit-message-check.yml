@@ -10,6 +10,11 @@ jobs:
   check_commit_message_format:
     runs-on: ubuntu-latest
     steps:
+      - name: Debug
+        run: |
+           echo "Event path: $GITHUB_EVENT_PATH"
+           cat $GITHUB_EVENT_PATH
+           
       - name: "Check Commit Message Format"
         run: |
           if ! grep -qE "(^|\s)AB#[0-9]+(\s|$)" $GITHUB_EVENT_PATH; then
