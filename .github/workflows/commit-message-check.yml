@@ -10,14 +10,10 @@ jobs:
   check_commit_message_format:
     runs-on: ubuntu-latest
     steps:
-      - name: Debug
-        run: |
-           echo "Event path: $GITHUB_EVENT_PATH"
-           cat $GITHUB_EVENT_PATH
-           
       - name: "Check Commit Message Format"
         run: |
-          if ! grep -qE "(^|\s)AB#[0-9]+(\s|$)" $GITHUB_EVENT_PATH; then
+          commit_message=$(jq --raw-output .pull_request.title $GITHUB_EVENT_PATH)
+          if [[ ! "$commit_message" =~ (^|\s)AB#[0-9]+(\s|$) ]]; then
             echo "Commit message should contain AB# followed by a number and separated from other text by a space"
             exit 1
           fi
