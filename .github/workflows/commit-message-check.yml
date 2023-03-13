@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: "Check Commit Message Format"
         run: |
-          if ! grep -qE "AB#[0-9]+" $GITHUB_EVENT_PATH; then
+          if ! grep -qE "\bAB#[0-9]+\b" $GITHUB_EVENT_PATH; then
             echo "Commit message should contain AB# followed by a number"
             exit 1
           fi
