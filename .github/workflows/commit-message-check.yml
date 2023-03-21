@@ -1,19 +1,32 @@
-name: "Check Commit Message Format"
+name: Commit Message Validation
 
 on:
   pull_request:
-    types: [opened, edited, reopened]
-    branches:
-      - '*'
+    types: [opened, reopened, synchronize]
+
 
 jobs:
-  check_commit_message_format:
+  validate_commit_message:
     runs-on: ubuntu-latest
+
     steps:
-      - name: "Check Commit Message Format"
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Check commit message format
         run: |
-          commit_message=$(jq --raw-output .pull_request.title $GITHUB_EVENT_PATH)
-          if [[ ! "$commit_message" =~ (^|\s)AB#[0-9]+(\s|$) ]]; then
-            echo "Commit message should contain AB# followed by a number and separated from other text by a space"
+          commit_msg=$(git log --format=%B -n 1)
+          if ! echo "$commit_msg" |  grep -E -q '\bAB#[0-9]+\b'; then
+            echo "Error: Commit message format is incorrect. Please use AB#ID format."
             exit 1
           fi
+          
+          
+          
+      - name: Cancel pull request if commit message validation fails
+        if: failure()
+        run: |
+          PR_NUMBER=$(jq -r '.number' "${GITHUB_EVENT_PATH}")
+          API_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/update-branch"
+          curl -X PUT -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.lydian-preview+json" $API_URL -d '{"expected_head_sha": null, "message": "Invalid commit message format. Please use the correct format."}'
+
