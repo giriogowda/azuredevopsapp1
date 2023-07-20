@@ -18,8 +18,10 @@ jobs:
           AZURE_DEVOPS_PAT: ${{ secrets.AZURE_DEVOPS_PAT }} # Create a GitHub secret for your Azure DevOps Personal Access Token
         run: |
           # Check for invalid work item IDs in pull request title and commit messages
+          set -x
 
           id=$(git log  --pretty=%B | grep "AB#1142778" | head -n 1 |grep -Eo 'AB#[0-9]+'| cut -d '#' -f 2)
+          echo " The is : $id "
           if [[ -z "$id" ]]; then
             echo "Unable to find Ticket ID in commit message. Proceeding with PR title"
             pr_title_id=$(echo "${{ github.event.pull_request.title }}" | grep -Eo 'AB#[0-9]+'| cut -d '#' -f 2)
