@@ -22,7 +22,7 @@ jobs:
           # Check for invalid work item IDs in pull request title and commit messages
           set -x
 
-          id=$(git log  --pretty=%B | grep "AB#1142778" | head -n 1 |grep -Eo 'AB#[0-9]+'| cut -d '#' -f 2)
+          id=$(git log -1 --pretty=%B | head -n 1 |grep -Eo 'AB#[0-9]+'| cut -d '#' -f 2)
           echo " The is : $id "
           if [[ -z "$id" ]]; then
             echo "Unable to find Ticket ID in commit message. Proceeding with PR title"
