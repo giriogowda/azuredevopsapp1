@@ -11,6 +11,8 @@ jobs:
   validate_azure_devops_links:
     runs-on: ubuntu-latest
     steps:
+      - name: Check out the code
+        uses: actions/checkout@v2
       - name: Check for valid Azure DevOps IDs
         env:
           AZURE_DEVOPS_ORG: "Kyndryl"
