@@ -32,7 +32,7 @@ jobs:
 
           # Validate Azure DevOps work item IDs
           response=$(curl -s -u ":$AZURE_DEVOPS_PAT" -X GET "https://dev.azure.com/$AZURE_DEVOPS_ORG/$AZURE_DEVOPS_PROJECT/_apis/wit/workitems/$id?api-version=6.0")
-          if [ "$(echo "$response" | jq '.id')" == "null" ]; then
+          if [ "$(echo "$response" | jq '.id')" == "null" ] || [ -z "$(echo "$response" | jq -r '.id')" ]; then
             echo "Work item with ID $id not found in Azure DevOps."
             exit 1
           else
