@@ -1,0 +1,51 @@
+name: "ADO ticked id check"
+
+
+
+on:
+  pull_request:
+    types: [opened, edited, reopened]
+    branches:
+      - '*'
+
+
+
+jobs:
+
+  check_commit_message_format:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+         ref: ${{ github.head_ref }}
+         fetch-depth: 0
+
+      - name: "Check Commit Message Format"
+        env:
+          AZURE_DEVOPS_ORG: "Kyndryl"
+          AZURE_DEVOPS_PROJECT: "ResiliencyEng"
+          AZURE_DEVOPS_PAT: ${{ secrets.AZURE_DEVOPS_PAT }} # Create a GitHub secret for your Azure DevOps Personal Access Token
+        run: |
+          commit_message=$(git log -1 --no-merges --pretty=%B)
+          echo Latest message is : $commit_message
+          if ! echo "$commit_message" | grep -E -q '\bAB#[0-9]+\b'; then
+            echo "Commit message should contain AB# followed by a number and separated from other text by a space"
+            exit 1
+          fi
+
+          id=$(git log  --pretty=%B | head -n 1 |grep -Eo 'AB#[0-9]+'| cut -d '#' -f 2)
+          if [[ -z "$id" ]]; then
+                echo " Unable to find Ticket ID in commit message .Proceeding with PR title"
+                pr_title_id=$(echo "${{ github.event.pull_request.title }}" | grep -Eo 'AB#[0-9]+'| cut -d '#' -f 2)
+                id=$pr_title_id
+          fi
+
+                # Validate Azure DevOps work item IDs
+          response=$(curl -s -u ":$AZURE_DEVOPS_PAT" -X GET "https://dev.azure.com/$AZURE_DEVOPS_ORG/$AZURE_DEVOPS_PROJECT/_apis/wit/workitems/$id?api-version=6.0")
+          if [ "$(echo "$response" | jq '.id')" == "null" ]; then
+                      echo "Work item with ID $id not found in Azure DevOps."
+                      exit 1
+          else
+                        echo " The ID is valid"
+          fi
