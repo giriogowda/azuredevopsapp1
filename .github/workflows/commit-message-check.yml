@@ -47,5 +47,5 @@ jobs:
                       echo "Work item with ID $id not found in Azure DevOps."
                       exit 1
           else
-                        echo " The ID is valid"
+                        echo " The ID:$id is valid"
           fi
